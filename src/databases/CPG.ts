@@ -1,7 +1,7 @@
 import env from 'configurations/Env';
 import IntranetDatabase from 'databases/Database';
 
-export default new (class CUG_Model extends IntranetDatabase {
+export default new (class CPG_Model extends IntranetDatabase {
 	constructor() {
 		super(env.DATABASE_CPG);
 	}
