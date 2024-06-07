@@ -1,0 +1,37 @@
+{
+	"compilerOptions": {
+		"lib": ["es2016", "esnext.asynciterable"],
+		"types": ["node"],
+
+		/* 타겟의 ECMASCript 버전 */
+		"target": "es2016",
+		/* 엄격한 타입 검사 옵션 활성화 */
+		"strict": true,
+		/* 모든 선언 파일(*.d.ts)의 타입 검사 생략 */
+		"skipLibCheck": false,
+		/* import시 절대경로 시작점 */
+		"baseUrl": "src",
+		/* 모든 모듈에 대해 절대 경로를 사용 */
+		"paths": { "*": ["*"] },
+		/* 'require'와 'import' 호환 */
+		"esModuleInterop": true,
+		/* default export가 없는 모듈에서 default imports를 허용 */
+		"allowSyntheticDefaultImports": true,
+		/* .json 확장자로 import된 모듈을 포함 */
+		"resolveJsonModule": true,
+		/* 모듈 코드 생성 지정 */
+		"module": "commonjs",
+		/* 모듈 해석 방법 */
+		"moduleResolution": "node",
+		/* 빌드결과물 디렉토리 */
+		"outDir": "./build",
+		/* 소스에 데코레이터 선언에 대한 설계-타입 메타 데이터를 보냄 */
+		"emitDecoratorMetadata": true,
+		/* ES 데코레이터 활성화 */
+		"experimentalDecorators": true,
+		/* 소스맵 사용 */
+		"sourceMap": true
+	},
+	"include": ["./src/**/*"],
+	"exclude": ["node_modules", "src/test", "**/*.spec.ts"]
+}
