@@ -1,12 +1,12 @@
-import env from 'configurations/Env';
-import route from 'configurations/RouteMapper';
+import env from '@/configurations/Environment';
+import route from '@/configurations/App';
 
 import express from 'express';
 import bodyParser from 'body-parser';
 
-import CUG from 'databases/CUG';
-import CPG from 'databases/CPG';
-import CCG from 'databases/CCG';
+import CUG from '@/databases/CUG';
+import CPG from '@/databases/CPG';
+import CCG from '@/databases/CCG';
 
 const app = express();
 app.use(route);

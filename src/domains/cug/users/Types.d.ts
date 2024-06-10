@@ -1,4 +1,4 @@
-import { SelectResult } from 'databases/Type';
+import { SelectResult } from '@/databases/Types';
 
 export interface User extends SelectResult {
 	jumin_log: string;

@@ -13,13 +13,13 @@ interface EnvConfig {
 }
 
 switch (process.env.NODE_ENV) {
-	case 'DEVELOPMENT':
+	case 'development':
 		env.config({ path: '.env.development' });
 		break;
-	case 'LOCALHOST':
+	case 'localhost':
 		env.config({ path: '.env.localhost' });
 		break;
-	case 'PRODUCTION':
+	case 'production':
 		env.config({ path: '.env.production' });
 		break;
 	default:
@@ -28,7 +28,7 @@ switch (process.env.NODE_ENV) {
 		process.exit(1);
 }
 
-const environmentVariables: EnvConfig = {
+const environments: EnvConfig = {
 	PORT: process.env.PORT || '',
 	DATABASE_HOSTNAME: process.env.DATABASE_HOSTNAME || '',
 	DATABASE_USERNAME: process.env.DATABASE_USERNAME || '',
@@ -40,4 +40,4 @@ const environmentVariables: EnvConfig = {
 	DATABASE_CCG: process.env.DATABASE_CCG || ''
 };
 
-export default environmentVariables;
+export default environments;

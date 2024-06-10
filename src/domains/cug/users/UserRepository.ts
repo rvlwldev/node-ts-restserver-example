@@ -1,6 +1,6 @@
-import repo from 'databases/CUG';
+import repo from '@/databases/CUG';
 
-import { User } from 'models/Types';
+import { User } from './Types';
 
 class UserModel {
 	async findUserWithPassword(id: string, pw: string): Promise<User> {

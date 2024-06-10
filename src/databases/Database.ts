@@ -1,8 +1,8 @@
-import env from 'configurations/Env';
+import env from '@/configurations/Environment';
 
 import { createPool, Pool, ResultSetHeader } from 'mysql2';
 
-import { SelectResult, InsertResult, UpdateResult, DeleteResult } from 'databases/Type';
+import { SelectResult, InsertResult, UpdateResult, DeleteResult } from '@/databases/Types';
 
 interface Version extends SelectResult {
 	version: string;
@@ -43,6 +43,7 @@ export default abstract class IntranetDatabase {
 		} catch (error) {
 			if (error instanceof Error) {
 				console.error(`\nDatabase connection Error\n${error.message}\n`);
+				console.log(error);
 			} else {
 				console.error(`\nUnknown error occurred\n${error}\n`);
 			}
