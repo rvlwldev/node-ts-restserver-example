@@ -1,8 +1,6 @@
 import 'reflect-metadata';
-import { Post, BodyParam } from 'routing-controllers';
-import { Inject } from 'typedi';
 
-import RestController from '@/decorators/RestController';
+import { RestController, Post, BodyParam, NotNull, Inject } from '@/decorators';
 
 import UserService from './UserService';
 
@@ -11,7 +9,11 @@ export default class UserController {
 	constructor(@Inject() private userService: UserService) {}
 
 	@Post('/login')
-	login(@BodyParam('id') id: string, @BodyParam('pw') pw: string) {
-		return this.userService.login(id, pw);
+	async login(
+		@BodyParam('id') @NotNull() id: string, // user id
+		@BodyParam('pw') @NotNull() pw: string // user password
+	) {
+		const user = await this.userService.login(id, pw);
+		return { user };
 	}
 }

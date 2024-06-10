@@ -1,8 +1,10 @@
 import repo from '@/databases/CUG';
+import Model from '@/decorators/classes/Model';
 
 import { User } from './Types';
 
-class UserModel {
+@Model()
+export default class UserModel {
 	async findUserWithPassword(id: string, pw: string): Promise<User> {
 		const SQL = `
         SELECT man.jumin_log        AS jumin_log,
@@ -43,5 +45,3 @@ class UserModel {
 			.then((user) => user[0]);
 	}
 }
-
-export default new UserModel();
