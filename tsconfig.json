@@ -4,15 +4,15 @@
 		"types": ["node"],
 
 		/* 타겟의 ECMASCript 버전 */
-		"target": "es2016",
+		"target": "es5",
 		/* 엄격한 타입 검사 옵션 활성화 */
 		"strict": true,
 		/* 모든 선언 파일(*.d.ts)의 타입 검사 생략 */
 		"skipLibCheck": false,
 		/* import시 절대경로 시작점 */
-		"baseUrl": "src",
+		"baseUrl": "./src",
 		/* 모든 모듈에 대해 절대 경로를 사용 */
-		"paths": { "*": ["*"] },
+		"paths": { "@/*": ["*"] },
 		/* 'require'와 'import' 호환 */
 		"esModuleInterop": true,
 		/* default export가 없는 모듈에서 default imports를 허용 */
@@ -30,8 +30,10 @@
 		/* ES 데코레이터 활성화 */
 		"experimentalDecorators": true,
 		/* 소스맵 사용 */
-		"sourceMap": true
+		"sourceMap": true,
+		/* any 타입 허용 */
+		"noImplicitAny": false,
 	},
-	"include": ["./src/**/*"],
-	"exclude": ["node_modules", "src/test", "**/*.spec.ts"]
+	"include": ["**/*"],
+	"exclude": ["node_modules", "src/test", "**/*.d.ts"]
 }

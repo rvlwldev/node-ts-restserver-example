@@ -1,7 +1,16 @@
-import env from 'configurations/Env';
-import { createPool, Pool, RowDataPacket } from 'mysql2';
+import env from '@/configurations/Environment';
 
-export default class IntranetDatabase {
+import { createPool, Pool, ResultSetHeader } from 'mysql2';
+
+import { SelectResult, InsertResult, UpdateResult, DeleteResult } from '@/databases/Types';
+
+interface Version extends SelectResult {
+	version: string;
+	type: string;
+}
+
+// TODO : 메소드별 Error 상세화
+export default abstract class IntranetDatabase {
 	private databaseName: string;
 	private pool: Pool;
 
@@ -23,20 +32,18 @@ export default class IntranetDatabase {
 		try {
 			const connection = await this.pool.promise().getConnection();
 
-			await this.pool
-				.promise()
-				.query<RowDataPacket[]>(`SELECT VERSION() AS version`)
-				.then(([rows]) => {
-					console.log(`MySQL (version: ${rows[0].version}) database '${this.databaseName}' is connected`);
-					this.connected;
-				});
+			await this.select<Version>(`SELECT VERSION() AS version`)
+				.then((result) => result[0].version)
+				.then((version) => `MySQL (version: ${version})`)
+				.then((message) => `${message} database '${this.databaseName}' is connected`)
+				.then(console.info);
 
 			connection.release();
-
 			return this;
 		} catch (error) {
 			if (error instanceof Error) {
-				console.error(`\nDatabase connection or query Error\n${error.message}\n`);
+				console.error(`\nDatabase connection Error\n${error.message}\n`);
+				console.log(error);
 			} else {
 				console.error(`\nUnknown error occurred\n${error}\n`);
 			}
@@ -44,20 +51,87 @@ export default class IntranetDatabase {
 		}
 	}
 
-	async selectOne(query: string) {
-		return this.pool.promise().query(query);
+	private replaceEmptyToNull<T extends SelectResult>(obj: T) {
+		Object.getOwnPropertyNames(obj).forEach((property) => {
+			const key = property as keyof T;
+			if (obj[key] === '') obj[key] = null as any;
+		});
+		return obj as T;
 	}
-	async select() {}
 
-	async insertOne() {}
-	async insert() {}
+	public async select<T extends SelectResult>(sql: string, values?: any): Promise<T[]> {
+		return this.pool
+			.promise()
+			.query(sql, values)
+			.then(([rows]) => rows as T[])
+			.then((result) => result.map((res) => this.replaceEmptyToNull<T>(res)));
+	}
 
-	async updateOne() {}
-	async update() {}
+	public async insert(sql: string, values?: any): Promise<InsertResult> {
+		return this.pool
+			.promise()
+			.query(sql, values)
+			.then(
+				([res]) =>
+					({
+						insertedRowsCount: (res as ResultSetHeader).affectedRows || 0
+					}) as InsertResult
+			);
+	}
 
-	async upsertOne() {}
-	async upsert() {}
+	public async update(sql: string, values?: any): Promise<UpdateResult> {
+		return this.pool
+			.promise()
+			.query(sql, values)
+			.then(
+				([res]) =>
+					({
+						updatedRowsCount: (res as ResultSetHeader).affectedRows || 0
+					}) as UpdateResult
+			);
+	}
 
-	async deleteOne() {}
-	async delete() {}
+	public async delete(sql: string, values?: any): Promise<DeleteResult> {
+		return this.pool
+			.promise()
+			.query(sql, values)
+			.then(
+				([res]) =>
+					({
+						deletedRowsCount: (res as ResultSetHeader).affectedRows || 0
+					}) as DeleteResult
+			);
+	}
+
+	/**
+	 * @description 비추천 ...
+	 *
+	 */
+	public async query<T>(sql: string, values?: any): Promise<T[] | InsertResult | UpdateResult | DeleteResult> {
+		const [result] = await this.pool.promise().query(sql, values);
+
+		// SELECT
+		if (Array.isArray(result)) return result as T[];
+
+		// INSERT
+		if ((result as ResultSetHeader).insertId)
+			return {
+				insertedRowsCount: (result as ResultSetHeader).affectedRows || 0
+			} as InsertResult;
+
+		// UPDATE
+		if ((result as ResultSetHeader).affectedRows && (result as ResultSetHeader).warningStatus) {
+			return {
+				updatedRowsCount: (result as ResultSetHeader).affectedRows || 0
+			} as UpdateResult;
+		}
+
+		// DELETE
+		if ((result as ResultSetHeader).affectedRows)
+			return {
+				deletedRowsCount: (result as ResultSetHeader).affectedRows || 0
+			} as DeleteResult;
+
+		throw new Error('Unknown query result type');
+	}
 }

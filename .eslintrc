@@ -8,7 +8,8 @@
 		"plugin:@typescript-eslint/recommended"
 	],
 	"rules": {
-		"no-console": ["warn", { "allow": ["info"] }]
+		"no-console": ["warn", { "allow": ["info"] }],
+		"@typescript-eslint/no-explicit-any": "off"
 	},
 	"overrides": []
 }

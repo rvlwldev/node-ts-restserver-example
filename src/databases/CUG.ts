@@ -1,5 +1,5 @@
-import env from 'configurations/Env';
-import IntranetDatabase from 'databases/Database';
+import env from '@/configurations/Environment';
+import IntranetDatabase from '@/databases/Database';
 
 export default new (class CUG_Model extends IntranetDatabase {
 	constructor() {
