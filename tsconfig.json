@@ -1,13 +1,17 @@
 {
 	"compilerOptions": {
-		"lib": ["es2016", "esnext.asynciterable"],
-		"types": ["node", "@types/node"],
+		// "lib": ["es2016", "esnext.asynciterable"],
+		// "types": ["node", "@types/node"],
 		/* 타겟의 ECMASCript 버전 */
-		"target": "ES2015",
+		"target": "ESNext",
+		/* 모듈 코드 생성 지정 */
+		"module": "CommonJS",
 		/* 엄격한 타입 검사 옵션 활성화 */
 		"strict": true,
 		/* 모든 선언 파일(*.d.ts)의 타입 검사 생략 여부 */
-		"skipLibCheck": false,
+		"skipLibCheck": true,
+		/* 파일명 대소문자 구분안함 */
+		"forceConsistentCasingInFileNames": true,
 		/* import시 절대경로 시작점 */
 		"baseUrl": "./src",
 		/* 경로 별칭 사용 */
@@ -18,8 +22,6 @@
 		"allowSyntheticDefaultImports": true,
 		/* .json 확장자로 import된 모듈을 포함 */
 		"resolveJsonModule": true,
-		/* 모듈 코드 생성 지정 */
-		"module": "commonjs",
 		/* 모듈 해석 방법 */
 		"moduleResolution": "node",
 		/* 빌드결과물 디렉토리 */

@@ -1,6 +1,5 @@
 {
 	"name": "ts-intranet",
-	"type": "module",
 	"version": "0.0.1",
 	"description": "CUG/CPG/CCG 통합 테스트 RestAPI 서버",
 	"main": "src/App.ts",
