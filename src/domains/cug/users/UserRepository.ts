@@ -5,7 +5,7 @@ import { User } from './Types';
 
 @Model()
 export default class UserModel {
-	async findUserWithPassword(id: string, pw: string): Promise<User> {
+	async findUserWithPassword(id: string, pw: string): Promise<User[] | null> {
 		const SQL = `
         SELECT man.jumin_log        AS jumin_log,
                man.jumin            AS jumin,
@@ -36,12 +36,9 @@ export default class UserModel {
           JOIN cupgdb.admin_post admin_post
             ON post_sub.mng_post = admin_post.post_code 
          WHERE man.id = ?
-           AND PASSWORD(?);
+           AND man.passwd_log = PASSWORD(?);
         `;
 
-		return repo
-			.select<User>(SQL, [id, pw])
-			.then((user) => user as User[])
-			.then((user) => user[0]);
+		return repo.select<User>(SQL, [id, pw]).then((users) => users as User[]);
 	}
 }
