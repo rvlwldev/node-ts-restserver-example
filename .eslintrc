@@ -11,5 +11,14 @@
 		"no-console": ["warn", { "allow": ["info"] }],
 		"@typescript-eslint/no-explicit-any": "off"
 	},
-	"overrides": []
+	"overrides": [
+		{
+			"files": ["build/**/*.js"],
+			"rules": {}
+		},
+		{
+			"files": ["src/middlewares/ErrorHandler.ts"],
+			"rules": { "@typescript-eslint/no-unused-vars": "off" }
+		}
+	]
 }

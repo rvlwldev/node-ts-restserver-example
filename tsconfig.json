@@ -1,18 +1,17 @@
 {
 	"compilerOptions": {
 		"lib": ["es2016", "esnext.asynciterable"],
-		"types": ["node"],
-
+		"types": ["node", "@types/node"],
 		/* 타겟의 ECMASCript 버전 */
-		"target": "es5",
+		"target": "ES2015",
 		/* 엄격한 타입 검사 옵션 활성화 */
 		"strict": true,
-		/* 모든 선언 파일(*.d.ts)의 타입 검사 생략 */
+		/* 모든 선언 파일(*.d.ts)의 타입 검사 생략 여부 */
 		"skipLibCheck": false,
 		/* import시 절대경로 시작점 */
 		"baseUrl": "./src",
-		/* 모든 모듈에 대해 절대 경로를 사용 */
-		"paths": { "@/*": ["*"] },
+		/* 경로 별칭 사용 */
+		"paths": { "@/*": ["*"], "@common/*": ["domains/_common/*"] },
 		/* 'require'와 'import' 호환 */
 		"esModuleInterop": true,
 		/* default export가 없는 모듈에서 default imports를 허용 */
@@ -24,7 +23,7 @@
 		/* 모듈 해석 방법 */
 		"moduleResolution": "node",
 		/* 빌드결과물 디렉토리 */
-		"outDir": "./build",
+		"outDir": "build",
 		/* 소스에 데코레이터 선언에 대한 설계-타입 메타 데이터를 보냄 */
 		"emitDecoratorMetadata": true,
 		/* ES 데코레이터 활성화 */
@@ -33,7 +32,11 @@
 		"sourceMap": true,
 		/* any 타입 허용 */
 		"noImplicitAny": false,
+		/* js 파일을 ts에서 import 사용 */
+		"allowJs": true,
+		/* 일반 js 파일에서도 에러체크 여부 */
+		"checkJs": true
 	},
-	"include": ["**/*"],
-	"exclude": ["node_modules", "src/test", "**/*.d.ts"]
+	"include": ["src", ".env.development", ".env.localhost", ".env.production"],
+	"exclude": ["node_modules"]
 }
