@@ -1,7 +1,7 @@
-const MetaDataKey = 'required_parameters_indexes';
+const MetaDataKey: string = 'required_parameters_indexes';
 
 export default function NotNull(): ParameterDecorator {
-	return function (method: Object, methodName: string | symbol | undefined, parameterIndex: number) {
+	return function (method: object, methodName: string | symbol | undefined, parameterIndex: number) {
 		if (methodName === undefined) return;
 
 		methodName = methodName.toString();
