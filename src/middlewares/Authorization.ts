@@ -8,21 +8,21 @@ import JWT from '@/utils/JWT';
 
 import { HttpStatusCode } from 'axios';
 
-function checkNoAuthenticate(req: Request) {
-	let path: string | string[] = req.path.split('/');
-	path = path[path.length - 1];
-
-	return Authentication.NoAuthenticateMethodNames.indexOf(path) > -1;
-}
-
 @Service()
 @Middleware({ type: 'before' })
 export default class Authentication implements ExpressMiddlewareInterface {
 	public static NoAuthenticateMethodNames: string[] = [];
 
+	private checkNoAuthenticate(req: Request) {
+		let path: string | string[] = req.path.split('/');
+		path = path[path.length - 1];
+
+		return Authentication.NoAuthenticateMethodNames.indexOf(path) > -1;
+	}
+
 	use(req: Request, res: Response, next: NextFunction) {
 		try {
-			if (checkNoAuthenticate(req)) return next();
+			if (this.checkNoAuthenticate(req)) return next();
 
 			const authentication = req.headers['Authentication'];
 			if (authentication === undefined)

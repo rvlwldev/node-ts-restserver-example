@@ -4,7 +4,7 @@ import Model from '@/decorators/classes/Model';
 import { User } from './Types';
 
 @Model()
-export default class UserModel {
+export default class UserRepository {
 	async findUserWithPassword(id: string, pw: string): Promise<User[] | null> {
 		const SQL = `
         SELECT man.jumin_log        AS jumin_log,
