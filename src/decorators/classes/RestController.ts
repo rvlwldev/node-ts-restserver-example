@@ -1,12 +1,13 @@
+import 'reflect-metadata';
+
 import { JsonController } from 'routing-controllers';
 import { Service } from 'typedi';
 
 import { ParameterRequiredException } from '@common/exceptions/ParameterRequiredException';
 
 function checkNotNullParameter(target: any) {
-	const isNull = (params: any[], index: number) => {
-		return params[index] == null || params[index] === '' || params[index] === undefined;
-	};
+	const isNull = (params: any[], index: number) =>
+		params[index] == null || params[index] === '' || params[index] === undefined;
 
 	Object.getOwnPropertyNames(target.prototype)
 		.filter((name) => name !== 'constructor')
