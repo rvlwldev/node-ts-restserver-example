@@ -89,7 +89,7 @@ VSCODE 확장 `Prettier - Code formatter` 설정 파일입니다.
 
 #### ex)
 
-```TS
+```JS
 // SELECT 결과 interface는 SelectResult를 상속받습니다.
 // mysql에서 반환 되는 RowDataPacket를 상속하여 컬럼을 자동으로 매칭합니다.
 export interface User extends SelectResult {
@@ -143,7 +143,7 @@ export default class UserModel {
 
 #### ex)
 
-```TS
+```JS
 import { Inject, Service } from 'typedi';
 import { User } from './Types';
 
@@ -156,11 +156,12 @@ export default class UserService {
 	async login(id: string, pw: string): Promise<User> {
         let user = await this.model.findUserWithPassword(id, pw);
 
-        if (user.length !== 1) throw new Exception(500, "잘못된 데이터 입니다.");
+        if (user.length !== 1) throw new Exception(HttpStatusCode.InternalServerError, "잘못된 데이터 입니다.");
 
         user = user[0];
         delete user.jumin;
         delete user.jumin_log;
+        delete user.passwd_log;
 
 		return user;
 	}
@@ -173,14 +174,14 @@ export default class UserService {
 
 #### ex)
 
-```TS
+```JS
 import 'reflect-metadata'; // 데코레이터 활용
 
 import {
     RestController,
     Post,
-    HttpCode,
-    BodyParam,
+    Status,
+    Body,
     NotNull,
     Inject
 } from '@/decorators';
@@ -193,10 +194,10 @@ export default class UserController {
 	constructor(@Inject() private userService: UserService) {} // 의존성 주입
 
 	@Post('/login') // POST URL : **/users/login
-    @HttpCode(HttpStatusCode.Ok) // 기본 값은 200이지만 상황에 따라 반환 코드값을 지정합니다.
+    @Status(HttpStatusCode.Ok) // 기본 값은 200이지만 상황에 따라 반환 코드값을 지정합니다.
 	async login(
-		@BodyParam('id') @NotNull() id: string, // 클라이언트가 요청한 body의 id 값
-		@BodyParam('pw') @NotNull() pw: string  // 클라이언트가 요청한 body의 id 값
+		@Body('id') @NotNull('아이디') id: string, // 클라이언트가 요청한 body의 아이디값
+		@Body('pw') @NotNull('비밀번호') pw: string  // 클라이언트가 요청한 body의 비밀번호값
 	) {
 		const user = await this.userService.login(id, pw);
 		return { user };
@@ -221,8 +222,63 @@ export default class UserController {
     -   `Patch(path: string)`: 컨트롤러에서 Patch 요청으로 선언
     -   `Put(path: string)`: 컨트롤러에서 Put 요청으로 선언
     -   `Delete(path: string)`: 컨트롤러에서 Delete 요청으로 선언
+    -   `Status(code: number)`: 성공 시 반환되는 HTTP 코드
 -   파라미터 데코레이터
-    -   `BodyParam(key: string)`: 요청된 Body의 특정 값을 가져옵니다.
-    -   `NotNull`: 필수 요청값으로 명시합니다. `BodyParam`의 옵션으로  
-        필수값 처리를 할 수 있지만 에러처리를 위해 따로 구현했습니다.
+    -   `Body(key: string)`: 요청된 Body의 특정 값(key)을 가져옵니다.
+    -   `NotNull(name: string)`: 필수 요청값으로 명시합니다. `Body`의 옵션으로  
+        필수값 처리를 할 수 있지만 에러처리를 위해 따로 구현했습니다.  
+        파라미터 `name` 은 입력하지 않았을 때, 클라이언트에게 보여질 이름입니다.  
+        예를 들어 '이메일'이라고 지정한다면 400의 에러코드와 "필수 값이 입력되지 않았습니다. (이메일)" 을 반환합니다.
     -   `Inject`: 생성자에서 의존성을 주입합니다.
+
+## 에러 처리
+
+> `_common/exceptions/Exception` 클래스를 상속 받아 구현해놓고 사용 할 수 있습니다.  
+> 따로 에러 처리를 하지 않았다면
+> 클라이언트에게 해당 에러의 code 값을 HTTP 상태 값으로 전송됩니다.
+
+### ex)
+
+```JS
+
+class InvalidDocument extends Exception {
+    constructor (code = 404, message = "해당 문서를 찾을 수 없습니다.") {
+        super(code, message);
+    }
+}
+
+// ...
+
+async getDocuments(...id: string[]): Promise<Document[]> {
+    return await this.model.findDocuments(...id).then((docs) => {
+        if (docs === null || docs.length < 1) {
+            throw new InvalidDocument();
+
+            // 또는
+            throw new InvalidDocument(HttpStatusCode.NotFound, "그런 문서 없습니다."); // 메세지 재정의
+        }
+
+        return docs;
+    })
+    .catch((err)=> {
+        if (err instanceof Exception) throw err;
+        throw err;
+    })
+}
+
+
+
+```
+
+#### 클라이언트 수신 예시
+
+```JSON
+// 요청은 올바르지만 삭제 등으로 문서는 없는 경우
+{
+    "error" : true,
+    "status" : 404,
+    "message" : "해당 문서를 찾을 수 없습니다."
+}
+
+// 등등 ..
+```
