@@ -10,6 +10,7 @@ interface EnvConfig {
 	DATABASE_CUG: string;
 	DATABASE_CPG: string;
 	DATABASE_CCG: string;
+	JWT_SECRET_KEY: string;
 }
 
 switch (process.env.NODE_ENV) {
@@ -37,7 +38,8 @@ const environments: EnvConfig = {
 	DATABASE_MAIN: process.env.DATABASE_MAIN || '',
 	DATABASE_CUG: process.env.DATABASE_CUG || '',
 	DATABASE_CPG: process.env.DATABASE_CPG || '',
-	DATABASE_CCG: process.env.DATABASE_CCG || ''
+	DATABASE_CCG: process.env.DATABASE_CCG || '',
+	JWT_SECRET_KEY: process.env.JWT_SECRET_KEY || ''
 };
 
 export default environments;
