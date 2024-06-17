@@ -19,6 +19,10 @@
 		{
 			"files": ["src/middlewares/ErrorHandler.ts"],
 			"rules": { "@typescript-eslint/no-unused-vars": "off" }
+		},
+		{
+			"files": ["src/databases/**/*.ts", "src/configurations/**/*.ts"],
+			"rules": { "no-console": "off" }
 		}
 	]
 }

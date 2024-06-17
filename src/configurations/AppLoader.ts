@@ -6,6 +6,7 @@ import { sync as glob } from 'glob';
 import { createExpressServer, useContainer } from 'routing-controllers';
 import { Container } from 'typedi';
 import { ErrorHandler } from '@/middlewares/ErrorHandler';
+import Authentication from '@/middlewares/Authorization';
 
 export default async () => {
 	useContainer(Container);
@@ -19,7 +20,7 @@ export default async () => {
 	return createExpressServer({
 		cors: false,
 		controllers,
-		middlewares: [ErrorHandler], // 전역 미들웨어
+		middlewares: [Authentication, ErrorHandler], // 전역 미들웨어
 		defaultErrorHandler: false
 	});
 };

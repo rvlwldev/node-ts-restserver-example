@@ -1,12 +1,12 @@
 import { Inject, Service } from 'typedi';
 import { User } from './Types';
 
-import UserModel from './UserRepository';
+import UserRepository from './UserRepository';
 import Exception from '@/domains/_common/exceptions/Exception';
 
 @Service()
 export default class UserService {
-	constructor(@Inject() private model: UserModel) {}
+	constructor(@Inject() private model: UserRepository) {}
 
 	async login(id: string, pw: string): Promise<User> {
 		return await this.model.findUserWithPassword(id, pw).then((users) => {

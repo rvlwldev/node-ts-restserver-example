@@ -2,7 +2,7 @@ import env from '@/configurations/Environment';
 
 import { createPool, Pool, ResultSetHeader } from 'mysql2';
 
-import { SelectResult, InsertResult, UpdateResult, DeleteResult } from '@/databases/Types';
+import { SelectResult, InsertResult, UpdateResult, DeleteResult } from '@common/types';
 
 interface Version extends SelectResult {
 	version: string;

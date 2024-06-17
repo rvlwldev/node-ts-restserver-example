@@ -1,6 +1,8 @@
 // class
 import RestController from './classes/RestController';
-import Model from './classes/Model';
+import { Service } from 'typedi';
+import Repository from './classes/Repository';
+import { Middleware } from 'routing-controllers';
 
 // method
 import { Get, Post, Patch, Put, Delete } from 'routing-controllers';
@@ -14,7 +16,9 @@ import { BodyParam as Body } from 'routing-controllers';
 export {
 	// class
 	RestController,
-	Model,
+	Service,
+	Repository,
+	Middleware,
 
 	// method
 	Get,

@@ -15,7 +15,13 @@
 		/* import시 절대경로 시작점 */
 		"baseUrl": "./src",
 		/* 경로 별칭 사용 */
-		"paths": { "@/*": ["*"], "@common/*": ["domains/_common/*"] },
+		"paths": {
+			"@/*": ["*"],
+			"@common/*": ["domains/_common/*"],
+			"ccg/*": ["domains/ccg/*"],
+			"cpg/*": ["domains/cpg/*"],
+			"cug/*": ["domains/cug/*"]
+		},
 		/* 'require'와 'import' 호환 */
 		"esModuleInterop": true,
 		/* default export가 없는 모듈에서 default imports를 허용 */
