@@ -1,7 +1,7 @@
 // class
 import RestController from './classes/RestController';
 import { Service } from 'typedi';
-import Model from './classes/Model';
+import Repository from './classes/Repository';
 import { Middleware } from 'routing-controllers';
 
 // method
@@ -17,7 +17,7 @@ export {
 	// class
 	RestController,
 	Service,
-	Model,
+	Repository,
 	Middleware,
 
 	// method

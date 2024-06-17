@@ -1,9 +1,9 @@
 import repo from '@/databases/CUG';
-import Model from '@/decorators/classes/Model';
+import Repository from '@/decorators/classes/Repository';
 
-import { User } from './Types';
+import { User } from 'cug/Types';
 
-@Model()
+@Repository()
 export default class UserRepository {
 	async findUserWithPassword(id: string, pw: string): Promise<User[] | null> {
 		const SQL = `
@@ -23,7 +23,7 @@ export default class UserRepository {
                post_sub.mng_post    AS post_code,
                admin_post.hr_o_code AS admin_hr_oCode
           FROM cug_man man
-          LEFT 
+          LEFT
           JOIN cug_confirm_map table_map
             ON man.jumin = table_map.jumin
           LEFT
@@ -34,7 +34,7 @@ export default class UserRepository {
             ON man.jumin_log = post_sub.jumin_log
           LEFT
           JOIN cupgdb.admin_post admin_post
-            ON post_sub.mng_post = admin_post.post_code 
+            ON post_sub.mng_post = admin_post.post_code
          WHERE man.id = ?
            AND man.passwd_log = PASSWORD(?);
         `;
